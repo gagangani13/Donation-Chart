@@ -12,16 +12,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.donations = exports.addAmount = void 0;
 const model_1 = require("./model");
 const addAmount = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { place, amount } = req.body;
+    const { place, amount, date } = req.body;
+    if (!place || !amount || !date) {
+        throw new Error();
+    }
     const addAmount = new model_1.Donation({
-        place, amount
+        place, amount, date
     });
     const saveAmount = yield addAmount.save();
     try {
-        res.send(saveAmount);
+        res.send({ ok: true, content: saveAmount });
     }
     catch (error) {
-        res.send(Error);
+        res.send({ ok: false, error: 'Failed to add amount' });
     }
 });
 exports.addAmount = addAmount;

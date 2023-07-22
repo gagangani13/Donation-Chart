@@ -8,8 +8,10 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const router_1 = __importDefault(require("./router"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const cors_1 = __importDefault(require("cors"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
+app.use((0, cors_1.default)());
 app.use(body_parser_1.default.json());
 app.use(router_1.default);
 mongoose_1.default

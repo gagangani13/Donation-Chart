@@ -27,6 +27,7 @@ exports.Donation = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const donationSchema = new mongoose_1.Schema({
     place: { type: String, required: true },
-    amount: { type: Number, required: true }
+    amount: { type: Number, required: true },
+    date: { type: Date, required: true }
 });
 exports.Donation = mongoose_1.default.model('Donation', donationSchema);
