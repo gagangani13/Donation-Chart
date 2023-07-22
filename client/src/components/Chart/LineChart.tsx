@@ -11,6 +11,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { ChartProps } from "./Chart";
 
 ChartJS.register(
   CategoryScale,
@@ -23,14 +24,12 @@ ChartJS.register(
   zoomPlugin
 );
 
-const labels: string[] = ["2017", "2018", "2019", "2020", "2021", "2022"];
-
 type ChartOptions = {
   plugins?: {
     legend?: {
       position?: "bottom" | "center" | "left" | "top" | "right" | "chartArea";
       labels?: {
-        color?: string; // Color of the legend text
+        color?: string; 
       };
     };
     zoom?: {};
@@ -41,7 +40,7 @@ type ChartOptions = {
         color?: string;
       };
       ticks?: {
-        color?: string; // Color of x-axis labels
+        color?: string;
       };
     };
     y?: {
@@ -49,83 +48,90 @@ type ChartOptions = {
         color?: string;
       };
       ticks?: {
-        color?: string; // Color of y-axis labels
+        color?: string; 
       };
     };
   };
 };
 
-const options: ChartOptions = {
-  plugins: {
-    legend: {
-      position: "bottom",
-      labels: {
-        color: "white", // Change the color of the legend text to white,
-      },
-    },
-    zoom: {
-      pan: {
-        enabled: true,
-      },
-      limits: {
-        x: { min: 0,max:100 },
-        y: { min: 0,max:100 },
+
+const LineChart: React.FC<ChartProps> = ({
+  bangalore,
+  hyderabad,
+  satara,
+  xAxis,
+}) => {
+  const options: ChartOptions = {
+    plugins: {
+      legend: {
+        position: "bottom",
+        labels: {
+          color: "white", 
+        },
       },
       zoom: {
-        wheel: {
+        pan: {
           enabled: true,
         },
-        pinch: {
-          enabled: true,
+        limits: {
+          x: { min: 0,max:xAxis.length},
+          y: { min: 0,max:Math.max(...bangalore,...hyderabad,...satara)}
         },
-        mode: "xy",
+        zoom: {
+          wheel: {
+            enabled: true,
+          },
+          pinch: {
+            enabled: true,
+          },
+          mode: "xy",
+        },
+      }
+    },
+    scales: {
+      x: {
+        grid: {
+          color: "#867979",
+        },
+        ticks: {
+          color: "white", 
+        },
       },
-    }
-  },
-  scales: {
-    x: {
-      grid: {
-        color: "#867979",
-      },
-      ticks: {
-        color: "white", // Change the color of x-axis labels
+      y: {
+        grid: {
+          color: "#867979",
+        },
+        ticks: {
+          color: "white", 
+        },
       },
     },
-    y: {
-      grid: {
-        color: "#867979",
+  };
+  
+  const labels: string[] = xAxis;
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "Bangalore",
+        data: bangalore,
+        backgroundColor: "#2196F3",
+        borderColor: "#2196F3",
       },
-      ticks: {
-        color: "white", // Change the color of y-axis labels
+      {
+        label: "Satara",
+        data: satara,
+        backgroundColor: "#66e226",
+        borderColor: "#66e226",
       },
-    },
-  },
-};
-
-const data = {
-  labels,
-  datasets: [
-    {
-      label: "Bangalore",
-      data: [32, 42, 51, 60, 51, 95],
-      backgroundColor: "#2196F3",
-      borderColor: "#2196F3",
-    },
-    {
-      label: "Satara",
-      data: [37, 42, 41, 37, 31, 44],
-      backgroundColor: "#66e226",
-      borderColor: "#66e226",
-    },
-    {
-      label: "Hyderabad",
-      data: [60, 54, 54, 28, 27, 49],
-      backgroundColor: "#e22661",
-      borderColor: "#e22661",
-    },
-  ],
-};
-const LineChart: React.FC = () => {
+      {
+        label: "Hyderabad",
+        data: hyderabad,
+        backgroundColor: "#e22661",
+        borderColor: "#e22661",
+      },
+    ],
+  };
   return (
       <Line options={options} data={data} />
   );

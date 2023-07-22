@@ -1,6 +1,6 @@
 .chartStyle {
   position: relative;
-  top: 20vh;
+  top: 15vh;
   width: 90vw;
   left: 5vw;
   background: #00000080;
@@ -11,6 +11,7 @@
 }
 .chartSize {
   display: flex;
+  max-height: 55vh;
   justify-content: center;
 }
 .active {

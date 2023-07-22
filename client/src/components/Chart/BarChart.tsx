@@ -1,6 +1,7 @@
 import React from "react";
 import { Bar } from "react-chartjs-2";
 import zoomPlugin from "chartjs-plugin-zoom";
+import { ChartProps } from "./Chart";
 import {
   Chart as ChartJS,
   BarElement,
@@ -19,8 +20,6 @@ ChartJS.register(
   zoomPlugin
 );
 
-const labels: string[] = ["2017", "2018", "2019", "2020", "2021", "2022"];
-
 type ChartOptions = {
   plugins?: {
     legend?: {
@@ -37,8 +36,8 @@ type ChartOptions = {
         color?: string;
       };
       ticks?: {
-        color?: string; 
-        hover?:string
+        color?: string;
+        hover?: string;
       };
     };
     y?: {
@@ -52,79 +51,85 @@ type ChartOptions = {
   };
 };
 
-const options: ChartOptions = {
-  plugins: {
-    legend: {
-      position: "bottom",
-      labels: {
-        color: "white"
-      },
-    },
-    zoom: {
-      pan: {
-        enabled: true,
-      },
-      limits: {
-        x: { min: 0,max:100 },
-        y: { min: 0,max:100 },
+
+
+const BarChart: React.FC<ChartProps> = ({
+  bangalore,
+  hyderabad,
+  satara,
+  xAxis,
+}) => {
+  const options: ChartOptions = {
+    plugins: {
+      legend: {
+        position: "bottom",
+        labels: {
+          color: "white",
+        },
       },
       zoom: {
-        wheel: {
+        pan: {
           enabled: true,
         },
-        pinch: {
-          enabled: true,
+        limits: {
+          x: { min: 0,max:xAxis.length},
+          y: { min: 0,max:Math.max(...bangalore,...hyderabad,...satara)},
         },
-        mode: "xy",
-      },
-    }
-  },
-  scales: {
-    x: {
-      grid: {
-        color: "#867979",
-      },
-      ticks: {
-        color: "white"
-      }
-    },
-    y: {
-      grid: {
-        color: "#867979",
-      },
-      ticks: {
-        color: "white"
+        zoom: {
+          wheel: {
+            enabled: true,
+          },
+          pinch: {
+            enabled: true,
+          },
+          mode: "xy",
+        },
       },
     },
-  }
-};
-
-const data = {
-  labels,
-  datasets: [
-    {
-      label: "Bangalore",
-      data: [32, 42, 51, 60, 51, 95],
-      backgroundColor: "#2196F3",
-      borderColor: "#2196F3",
-      legendColor: "white",
+    scales: {
+      x: {
+        grid: {
+          color: "#867979",
+        },
+        ticks: {
+          color: "white",
+        },
+      },
+      y: {
+        grid: {
+          color: "#867979",
+        },
+        ticks: {
+          color: "white",
+        },
+      },
     },
-    {
-      label: "Satara",
-      data: [37, 42, 41, 37, 31, 44],
-      backgroundColor: "#66e226",
-      borderColor: "#66e226",
-    },
-    {
-      label: "Hyderabad",
-      data: [60, 54, 54, 28, 27, 49],
-      backgroundColor: "#e22661",
-      borderColor: "#e22661",
-    },
-  ],
-};
-
-const BarChart: React.FC = () => {
+  };
+  const labels: string[] = xAxis;
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "Bangalore",
+        data: bangalore,
+        backgroundColor: "#2196F3",
+        borderColor: "#2196F3",
+        legendColor: "white",
+      },
+      {
+        label: "Satara",
+        data: satara,
+        backgroundColor: "#66e226",
+        borderColor: "#66e226",
+      },
+      {
+        label: "Hyderabad",
+        data: hyderabad,
+        backgroundColor: "#e22661",
+        borderColor: "#e22661",
+      },
+    ],
+  };
   return <Bar options={options} data={data} />;
 };
 

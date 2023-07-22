@@ -23,15 +23,15 @@ nav{
 }
 .NavLink{
   text-decoration: none;
-  color: black;
-  padding: 5px;
+  color: antiquewhite;
+  padding: 6px;
   font-weight: 500;
 }
 .NavLink:hover{
   cursor: pointer;
-  color: antiquewhite;
+  border:3px solid black;
 }
 .activeLink{
-  border:2px solid antiquewhite;
+  border:3px solid black;
 }
 
