@@ -24,7 +24,7 @@ header h1{
 }
 
 .activeLink {
-  color: yellow;
+  color: #ffc107;
   scale: 1.1;
   font-weight: bold;
 }

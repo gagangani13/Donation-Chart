@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Donation } from "./model";
+import excelJS from 'exceljs'
 export const addAmount = async (req: Request, res: Response) => {
   const { place, amount, date } = req.body;
   if (!place || !amount || !date) {
@@ -294,5 +295,41 @@ export const donations = async (req: Request, res: Response) => {
     } catch (error) {
       res.send({ ok: false, error: "Failed to fetch!!" });
     }
+  }
+};
+export const download = async (req: Request, res: Response) => {
+  try {
+    const workbook = new excelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Donations");
+    worksheet.columns = [
+      { header: "SL.NO", key: "slNo" },
+      { header: "Amount", key: "amount" },
+      { header: "Place", key: "place" },
+      { header: "Date", key: "date" },
+    ];
+
+    const getDonations = await Donation.find({}).sort({ date: -1 });
+    const dataWithSlNo = getDonations.map((data, index) => ({
+      ...data.toJSON(),
+      slNo: index + 1,
+    }));
+
+    dataWithSlNo.forEach((data) => {
+      worksheet.addRow(data);
+    });
+
+    worksheet.getRow(1).eachCell((cell) => {
+      cell.font = { bold: true };
+    });
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader("Content-Disposition", "attachment; filename=Donations.xlsx");
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (error) {
+    res.send({ ok: false, error: "Download Failed!" });
   }
 };

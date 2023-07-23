@@ -39,10 +39,6 @@ const PieChart: React.FC<ChartProps> = ({
         pan: {
           enabled: true,
         },
-        limits: {
-          x: { min: 0, max: 100 },
-          y: { min: 0, max: 100 },
-        },
         zoom: {
           wheel: {
             enabled: true,

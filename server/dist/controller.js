@@ -8,9 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.donations = exports.addAmount = void 0;
+exports.download = exports.donations = exports.addAmount = void 0;
 const model_1 = require("./model");
+const exceljs_1 = __importDefault(require("exceljs"));
 const addAmount = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { place, amount, date } = req.body;
     if (!place || !amount || !date) {
@@ -265,3 +269,31 @@ const donations = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.donations = donations;
+const download = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const workbook = new exceljs_1.default.Workbook();
+        const worksheet = workbook.addWorksheet("Donations");
+        worksheet.columns = [
+            { header: "SL.NO", key: "slNo" },
+            { header: "Amount", key: "amount" },
+            { header: "Place", key: "place" },
+            { header: "Date", key: "date" },
+        ];
+        const getDonations = yield model_1.Donation.find({}).sort({ date: -1 });
+        const dataWithSlNo = getDonations.map((data, index) => (Object.assign(Object.assign({}, data.toJSON()), { slNo: index + 1 })));
+        dataWithSlNo.forEach((data) => {
+            worksheet.addRow(data);
+        });
+        worksheet.getRow(1).eachCell((cell) => {
+            cell.font = { bold: true };
+        });
+        res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        res.setHeader("Content-Disposition", "attachment; filename=Donations.xlsx");
+        yield workbook.xlsx.write(res);
+        res.end();
+    }
+    catch (error) {
+        res.send({ ok: false, error: "Download Failed!" });
+    }
+});
+exports.download = download;

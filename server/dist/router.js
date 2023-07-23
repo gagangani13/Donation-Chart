@@ -5,4 +5,5 @@ const controller_1 = require("./controller");
 const router = (0, express_1.Router)();
 router.get('/donations', controller_1.donations);
 router.post('/addAmount', controller_1.addAmount);
+router.get('/download', controller_1.download);
 exports.default = router;

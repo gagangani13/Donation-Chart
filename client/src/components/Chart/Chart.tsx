@@ -8,7 +8,6 @@ import { Form, Button } from "react-bootstrap";
 import axios from "axios";
 import { io, Socket } from "socket.io-client";
 
-
 export interface ChartProps {
   bangalore: number[];
   hyderabad: number[];
@@ -22,7 +21,6 @@ const Chart: React.FC = () => {
     // eslint-disable-next-line
   }, []);
   
-
   const socket: Socket = io("http://localhost:5000/");
   socket.on("updateChart", () => {
     getData();
@@ -72,12 +70,11 @@ const Chart: React.FC = () => {
       console.log(error);
     }
   }
+
   return (
     <Element name="Chart" className="chartStyle">
       <div className="downloadAndSort">
-        <Button type="button" variant="warning">
-        <i className="fa-solid fa-download"></i>
-        </Button>
+        <a href="http://localhost:5000/download" download="Donations.xlsx"><i className="fa-solid fa-download fa-lg"></i></a>
         <Form className="sorting">
           <Form.Select
             aria-label="Floating label select example"
@@ -95,7 +92,7 @@ const Chart: React.FC = () => {
             ))}
           </Form.Select>
           <Button type="button" onClick={getData} variant="secondary">
-            Get
+            Show
           </Button>
         </Form>
       </div>
