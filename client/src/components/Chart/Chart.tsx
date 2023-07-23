@@ -21,7 +21,7 @@ const Chart: React.FC = () => {
     // eslint-disable-next-line
   }, []);
   
-  const socket: Socket = io("http://localhost:5000/");
+  const socket: Socket = io("https://donation-chart-server.onrender.com/");
   socket.on("updateChart", () => {
     getData();
   });
@@ -45,7 +45,7 @@ const Chart: React.FC = () => {
 
   async function getData() {
     const response = await axios.get(
-      `http://localhost:5000/donations?year=${yearRef.current?.value}&month=${monthRef.current?.value}`
+      `https://donation-chart-server.onrender.com/donations?year=${yearRef.current?.value}&month=${monthRef.current?.value}`
     );
     const data = await response.data;
     try {
@@ -74,7 +74,7 @@ const Chart: React.FC = () => {
   return (
     <Element name="Chart" className="chartStyle">
       <div className="downloadAndSort">
-        <a href="http://localhost:5000/download" download="Donations.xlsx"><i className="fa-solid fa-download fa-lg"></i></a>
+        <a href="https://donation-chart-server.onrender.com/download" download="Donations.xlsx"><i className="fa-solid fa-download fa-lg"></i></a>
         <Form className="sorting">
           <Form.Select
             aria-label="Floating label select example"

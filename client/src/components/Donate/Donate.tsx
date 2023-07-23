@@ -14,7 +14,7 @@ const Donate: React.FC<DonateProps> = () => {
   const placeRef = useRef<HTMLSelectElement>(null); 
   const dateRef = useRef<HTMLInputElement>(null); 
 
-  const socket:Socket = io("http://localhost:5000/");
+  const socket:Socket = io("https://donation-chart-server.onrender.com/");
 
 async  function donateHandler(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -24,7 +24,7 @@ async  function donateHandler(event: FormEvent<HTMLFormElement>) {
     if (!amount||!place||!date) {
       alert('Please fill the form')
     }
-    const response=await axios.post('http://localhost:5000/addAmount',{amount,place,date})
+    const response=await axios.post('https://donation-chart-server.onrender.com/addAmount',{amount,place,date})
     const data=await response.data;
     try {
       if (!data.ok) {
