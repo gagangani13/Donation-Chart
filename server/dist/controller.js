@@ -90,6 +90,7 @@ const donations = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         ]);
         const uniqueDatesSet = new Set(dataResult.map((data) => data._id.date.getTime()));
         const xAxisArray = Array.from(uniqueDatesSet).map((time) => new Date(time));
+        xAxisArray.sort((a, b) => a.getTime() - b.getTime());
         const bangaloreArray = fillZeroesForPlace("Bangalore", xAxisArray, dataResult);
         const sataraArray = fillZeroesForPlace("Satara", xAxisArray, dataResult);
         const hyderabadArray = fillZeroesForPlace("Hyderabad", xAxisArray, dataResult);
@@ -122,7 +123,6 @@ const donations = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 return amount !== undefined ? amount : 0;
             });
         }
-        xAxisArray.sort((a, b) => a.getTime() - b.getTime());
         try {
             res.send({
                 ok: true,

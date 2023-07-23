@@ -83,6 +83,7 @@ export const donations = async (req: Request, res: Response) => {
     );
   
     const xAxisArray = Array.from(uniqueDatesSet).map((time) => new Date(time));
+    xAxisArray.sort((a, b) => a.getTime() - b.getTime()); 
     const bangaloreArray = fillZeroesForPlace(
       "Bangalore",
       xAxisArray,
@@ -132,7 +133,6 @@ export const donations = async (req: Request, res: Response) => {
         return amount !== undefined ? amount : 0;
       });
     }
-    xAxisArray.sort((a, b) => a.getTime() - b.getTime()); 
     try {
       res.send({
         ok: true,
