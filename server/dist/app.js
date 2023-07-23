@@ -20,7 +20,7 @@ app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use(router_1.default);
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: "https://donation-chart.vercel.app",
         methods: ["GET", "POST", "DELETE", "PATCH", "PUT"],
     },
 });
