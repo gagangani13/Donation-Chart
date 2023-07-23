@@ -8,6 +8,7 @@ import { Form, Button } from "react-bootstrap";
 import axios from "axios";
 import { io, Socket } from "socket.io-client";
 
+
 export interface ChartProps {
   bangalore: number[];
   hyderabad: number[];
@@ -20,10 +21,10 @@ const Chart: React.FC = () => {
     getData();
     // eslint-disable-next-line
   }, []);
+  
 
   const socket: Socket = io("http://localhost:5000/");
   socket.on("updateChart", () => {
-    console.log("called");
     getData();
   });
 
@@ -35,6 +36,7 @@ const Chart: React.FC = () => {
   const [years, setYears] = useState<Array<number>>([]);
   const [months, setMonths] = useState<Array<string>>([]);
   const [amount, setAmount] = useState<number>(0);
+
 
   const yearRef = useRef<HTMLSelectElement | null>(null);
   const monthRef = useRef<HTMLSelectElement | null>(null);
@@ -74,7 +76,7 @@ const Chart: React.FC = () => {
     <Element name="Chart" className="chartStyle">
       <div className="downloadAndSort">
         <Button type="button" variant="warning">
-          Download
+        <i className="fa-solid fa-download"></i>
         </Button>
         <Form className="sorting">
           <Form.Select

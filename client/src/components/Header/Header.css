@@ -1,37 +1,84 @@
 @import url('https://fonts.googleapis.com/css2?family=Yatra+One&family=Ysabeau+Office:ital@1&display=swap');
 header {
-  width: 100vw;
-  height: 10vh;
-  background: var(--header-color);
+  background:  linear-gradient(45deg, #c95b5b, #0e0e0e);
+  box-shadow: 0 5px 10px black;
   position: fixed;
   z-index: 5;
+  width: 99vw;
+  height: 10vh;
+  left: 0.5vw;
+  box-sizing: border-box;
   display: flex;
-  align-items: center;
-  margin: auto;
   justify-content: space-between;
-  box-shadow: 0 5px 10px black;
+  align-items: center;
 }
 header h1{
     font-family: 'Ysabeau Office', sans-serif;
     font-weight: bold;
     color: beige;
 }
-nav{
-  width: 50vw;
-  justify-content: space-around;
-  display: flex;
-}
-.NavLink{
+
+.NavLink {
+  color: azure;
   text-decoration: none;
-  color: antiquewhite;
-  padding: 6px;
-  font-weight: 500;
 }
-.NavLink:hover{
-  cursor: pointer;
-  border:3px solid black;
+
+.activeLink {
+  color: yellow;
+  scale: 1.1;
+  font-weight: bold;
 }
-.activeLink{
-  border:3px solid black;
+
+.nav__menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 2rem;
+  margin: 0 1rem;
+}
+
+.nav__toggler {
+  display: none;
+}
+
+.nav__toggler div {
+  width: 2.5rem;
+  height: 0.2rem;
+  margin: 0.4rem;
+  background: rgb(204, 204, 204);
+  transition: 0.3s ease-in;
+}
+
+@media screen and (max-width: 520px) {
+  .nav__toggler {
+    display: block;
+    cursor: pointer;
+    align-self: center;
+  }
+  .nav__menu {
+    position: fixed;
+    top: 10vh;
+    right: -10vw;
+    height: 90vh;
+    width: 60vw;
+    background: #0e0e0e;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: 0.3s ease-in;
+    backdrop-filter: blur(30px);
+  }
+}
+
+.nav__active {
+  transform: translateX(0%);
+}
+.toggle .line1 {
+  transform: rotate(-45deg) translate(-4px, 5px);
+}
+.toggle .line2 {
+  opacity: 0;
+}
+.toggle .line3 {
+  transform: rotate(45deg) translate(-4px, -5px);
 }
 

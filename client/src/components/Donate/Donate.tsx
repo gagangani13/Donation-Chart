@@ -36,7 +36,7 @@ async  function donateHandler(event: FormEvent<HTMLFormElement>) {
       alert('Thank you')
       socket.emit('Donated')
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   }
 
@@ -47,9 +47,9 @@ async  function donateHandler(event: FormEvent<HTMLFormElement>) {
       </h3>
       <Form className="form" onSubmit={donateHandler}>
         <FloatingLabel controlId="floatingInputGrid" label="Amount in Rupees">
-          <Form.Control type="number" placeholder="100" required ref={amountRef} />
+          <Form.Control type="number" min={1} required ref={amountRef} />
         </FloatingLabel>
-        <Form.Select aria-label="Floating label select example" required ref={placeRef}>
+        <Form.Select required ref={placeRef}>
           <option value="Bangalore">Bangalore</option>
           <option value="Satara">Satara</option>
           <option value="Hyderabad">Hyderabad</option>
