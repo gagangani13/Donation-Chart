@@ -81,8 +81,8 @@ export const donations = async (req: Request, res: Response) => {
     const uniqueDatesSet = new Set(
       dataResult.map((data) => data._id.date.getTime())
     );
+  
     const xAxisArray = Array.from(uniqueDatesSet).map((time) => new Date(time));
-
     const bangaloreArray = fillZeroesForPlace(
       "Bangalore",
       xAxisArray,
@@ -109,8 +109,7 @@ export const donations = async (req: Request, res: Response) => {
           _id: { month: { $month: "$date" } },
           totalAmount: { $sum: "$amount" },
         },
-      },
-      { $sort: { _id: 1 } },
+      }
     ]);
 
     const monthsArray = monthsData
@@ -132,6 +131,7 @@ export const donations = async (req: Request, res: Response) => {
         return amount !== undefined ? amount : 0;
       });
     }
+    xAxisArray.sort((a, b) => a.getTime() - b.getTime()); 
     try {
       res.send({
         ok: true,
@@ -145,7 +145,7 @@ export const donations = async (req: Request, res: Response) => {
         uniqueYearsArray,
         monthsArray,
         year,
-        month,
+        month
       });
     } catch (error) {
       res.send({ ok: false, error: "Failed to fetch!!" });

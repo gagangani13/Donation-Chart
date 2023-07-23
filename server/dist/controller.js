@@ -107,8 +107,7 @@ const donations = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                     _id: { month: { $month: "$date" } },
                     totalAmount: { $sum: "$amount" },
                 },
-            },
-            { $sort: { _id: 1 } },
+            }
         ]);
         const monthsArray = monthsData
             .filter((data) => data.totalAmount !== 0)
@@ -122,6 +121,7 @@ const donations = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 return amount !== undefined ? amount : 0;
             });
         }
+        xAxisArray.sort((a, b) => a.getTime() - b.getTime());
         try {
             res.send({
                 ok: true,
@@ -132,7 +132,7 @@ const donations = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 uniqueYearsArray,
                 monthsArray,
                 year,
-                month,
+                month
             });
         }
         catch (error) {
