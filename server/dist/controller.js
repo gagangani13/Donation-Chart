@@ -104,7 +104,7 @@ const donations = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                     totalAmount: { $sum: "$amount" },
                 },
             },
-            { $sort: { _id: 1 } }
+            { $sort: { _id: 1 } },
         ]);
         const monthsArray = monthsData
             .filter((data) => data.totalAmount !== 0)
@@ -128,14 +128,17 @@ const donations = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 uniqueYearsArray,
                 monthsArray,
                 year,
-                month
+                month,
             });
         }
         catch (error) {
             res.send({ ok: false, error: "Failed to fetch!!" });
         }
     }
-    else if (year && uniqueYearsArray.includes(Number(year)) && month && !monthNames.includes(month)) {
+    else if (year &&
+        uniqueYearsArray.includes(Number(year)) &&
+        month &&
+        !monthNames.includes(month)) {
         const dataResult = yield model_1.Donation.aggregate([
             {
                 $match: {
@@ -198,7 +201,7 @@ const donations = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 uniqueYearsArray,
                 monthsArray: monthNames.filter((_, idx) => bangaloreArray[idx] || sataraArray[idx] || hyderabadArray[idx]),
                 year,
-                month: 'Month'
+                month: "Month",
             });
         }
         catch (error) {
@@ -252,8 +255,8 @@ const donations = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 hyderabadArray,
                 uniqueYearsArray,
                 monthsArray: [],
-                year: 'Year',
-                month: 'Month'
+                year: "Year",
+                month: "Month",
             });
         }
         catch (error) {

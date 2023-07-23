@@ -1,4 +1,4 @@
-import { useState,useRef,useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import BarChart from "./BarChart";
 import "./Chart.css";
 import LineChart from "./LineChart";
@@ -6,6 +6,7 @@ import PieChart from "./PieChart";
 import { Element } from "react-scroll";
 import { Form, Button } from "react-bootstrap";
 import axios from "axios";
+import { io, Socket } from "socket.io-client";
 
 export interface ChartProps {
   bangalore: number[];
@@ -15,10 +16,16 @@ export interface ChartProps {
 }
 
 const Chart: React.FC = () => {
+  useEffect(() => {
+    getData();
+    // eslint-disable-next-line
+  }, []);
 
-  useEffect(()=>{
-    getData()
-  },[])
+  const socket: Socket = io("http://localhost:5000/");
+  socket.on("updateChart", () => {
+    console.log("called");
+    getData();
+  });
 
   const [activeChart, setActiveChart] = useState<string>("bar");
   const [xAxis, setXAxis] = useState<Array<string>>([]);
@@ -26,11 +33,11 @@ const Chart: React.FC = () => {
   const [satara, setSatara] = useState<Array<number>>([]);
   const [hyderabad, setHyderabad] = useState<Array<number>>([]);
   const [years, setYears] = useState<Array<number>>([]);
-  const [months,setMonths]=useState<Array<string>>([]);
-  const [amount,setAmount]=useState<number>(0)
+  const [months, setMonths] = useState<Array<string>>([]);
+  const [amount, setAmount] = useState<number>(0);
 
-  const yearRef=useRef<HTMLSelectElement | null>(null);
-  const monthRef=useRef<HTMLSelectElement | null>(null);
+  const yearRef = useRef<HTMLSelectElement | null>(null);
+  const monthRef = useRef<HTMLSelectElement | null>(null);
 
   const handleChartClick = (chartType: string) => {
     setActiveChart(chartType);
@@ -51,13 +58,16 @@ const Chart: React.FC = () => {
       setHyderabad(data.hyderabadArray);
       setYears(data.uniqueYearsArray);
       setMonths(data.monthsArray);
-      const totalSum = [...data.bangaloreArray, ...data.sataraArray, ...data.hyderabadArray].reduce((acc, curr) => acc + curr, 0);
-      setAmount(totalSum)
-      yearRef.current!.value=data.year
-      monthRef.current!.value=data.month
-
+      const totalSum = [
+        ...data.bangaloreArray,
+        ...data.sataraArray,
+        ...data.hyderabadArray,
+      ].reduce((acc, curr) => acc + curr, 0);
+      setAmount(totalSum);
+      yearRef.current!.value = data.year;
+      monthRef.current!.value = data.month;
     } catch (error) {
-      alert(error);
+      console.log(error);
     }
   }
   return (
@@ -67,7 +77,10 @@ const Chart: React.FC = () => {
           Download
         </Button>
         <Form className="sorting">
-          <Form.Select aria-label="Floating label select example" ref={monthRef}>
+          <Form.Select
+            aria-label="Floating label select example"
+            ref={monthRef}
+          >
             <option value="Month">Month</option>
             {months.map((month) => (
               <option value={month}>{month}</option>
@@ -84,7 +97,14 @@ const Chart: React.FC = () => {
           </Button>
         </Form>
       </div>
-      <h5>Donations in {`${(monthRef.current?.value!=='Month') ? monthRef.current?.value:''} ${(yearRef.current?.value!=='Year') ? yearRef.current?.value:'Total'}`}</h5>
+      <h5>
+        Donations in{" "}
+        {`${
+          monthRef.current?.value !== "Month" ? monthRef.current?.value : ""
+        } ${
+          yearRef.current?.value !== "Year" ? yearRef.current?.value : "Total"
+        }`}
+      </h5>
       <h4>&#8377; {amount}</h4>
       <div className="chartSize">
         {activeChart === "bar" && (
@@ -95,14 +115,22 @@ const Chart: React.FC = () => {
             xAxis={xAxis}
           />
         )}
-        {activeChart === "line" && <LineChart bangalore={bangalore}
+        {activeChart === "line" && (
+          <LineChart
+            bangalore={bangalore}
             hyderabad={hyderabad}
             satara={satara}
-            xAxis={xAxis}/>}
-        {activeChart === "pie" && <PieChart bangalore={bangalore}
+            xAxis={xAxis}
+          />
+        )}
+        {activeChart === "pie" && (
+          <PieChart
+            bangalore={bangalore}
             hyderabad={hyderabad}
             satara={satara}
-            xAxis={xAxis} />}
+            xAxis={xAxis}
+          />
+        )}
       </div>
       <div className="chartOptions">
         <i

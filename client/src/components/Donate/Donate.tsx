@@ -6,13 +6,15 @@ import { Element } from "react-scroll";
 import { Button } from "react-bootstrap";
 import { useRef, FormEvent } from "react";
 import axios from "axios";
-
+import { io,Socket  } from "socket.io-client";
 interface DonateProps {}
 
 const Donate: React.FC<DonateProps> = () => {
   const amountRef = useRef<HTMLInputElement>(null); 
   const placeRef = useRef<HTMLSelectElement>(null); 
   const dateRef = useRef<HTMLInputElement>(null); 
+
+  const socket:Socket = io("http://localhost:5000/");
 
 async  function donateHandler(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -32,9 +34,9 @@ async  function donateHandler(event: FormEvent<HTMLFormElement>) {
       placeRef.current!.value='';
       dateRef.current!.value='';
       alert('Thank you')
-      console.log(data);
+      socket.emit('Donated')
     } catch (error) {
-      alert(error)
+      console.log(error);
     }
   }
 
