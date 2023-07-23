@@ -107,7 +107,8 @@ const donations = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                     _id: { month: { $month: "$date" } },
                     totalAmount: { $sum: "$amount" },
                 },
-            }
+            },
+            { $sort: { _id: 1 } },
         ]);
         const monthsArray = monthsData
             .filter((data) => data.totalAmount !== 0)

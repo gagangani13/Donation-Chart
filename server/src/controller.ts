@@ -109,7 +109,8 @@ export const donations = async (req: Request, res: Response) => {
           _id: { month: { $month: "$date" } },
           totalAmount: { $sum: "$amount" },
         },
-      }
+      },
+      { $sort: { _id: 1 } },
     ]);
 
     const monthsArray = monthsData
